@@ -1,0 +1,15 @@
+artifact_uri: ./0/fd53c2d613a2440590480559d69fbf2a/artifacts
+end_time: 1787418211077
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fd53c2d613a2440590480559d69fbf2a
+run_name: melodic-smelt-220
+run_uuid: fd53c2d613a2440590480559d69fbf2a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1787418209274
+status: 3
+tags: []
+user_id: Tunnne
