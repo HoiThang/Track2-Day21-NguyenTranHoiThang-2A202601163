@@ -5,7 +5,7 @@ import yaml
 import json
 import joblib
 import os
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, VotingClassifier
 from sklearn.metrics import accuracy_score, f1_score
 
 EVAL_THRESHOLD = 0.70
@@ -43,9 +43,15 @@ def train(
         # TODO 3: Ghi nhan cac sieu tham so
         mlflow.log_params(params)
 
-        # TODO 4: Khoi tao va huan luyen RandomForestClassifier
+        # TODO 4: Khoi tao va huan luyen VotingClassifier (RF + ET ensemble)
+        # Ket hop RandomForest + ExtraTrees de dat accuracy cao nhat
         # Goi y: su dung random_state=42 de dam bao tinh tai tao
-        model = RandomForestClassifier(**params, random_state=42)
+        rf = RandomForestClassifier(**params, random_state=42, n_jobs=-1)
+        et = ExtraTreesClassifier(**params, random_state=42, n_jobs=-1)
+        model = VotingClassifier(
+            estimators=[('rf', rf), ('et', et)],
+            voting='soft'
+        )
         model.fit(X_train, y_train)
 
         # TODO 5: Du doan tren tap danh gia va tinh chi so
