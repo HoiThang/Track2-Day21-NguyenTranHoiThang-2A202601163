@@ -137,19 +137,19 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
-          command_timeout: 60s
+          command_timeout: 180s
           script: |
             sudo systemctl restart mlops-serve
-            # Cho service thoi gian download model tu GCS va start
-            sleep 15
-            # Retry health check toi da 3 lan
-            for i in 1 2 3; do
+            # Cho service thoi gian download model tu GCS (~10MB) va start
+            # Retry health check toi da 10 lan, moi lan cach 10 giay
+            for i in $(seq 1 10); do
+              sleep 10
               if curl -sf http://localhost:8000/health; then
                 echo "Health check passed."
                 exit 0
               fi
-              echo "Health check failed, retrying ($i/3)..."
-              sleep 5
+              echo "Health check failed, retrying ($i/10)..."
             done
-            echo "Health check failed after 3 retries."
+            echo "Health check failed after 10 retries."
+            sudo journalctl -u mlops-serve -n 20 --no-pager
             exit 1
